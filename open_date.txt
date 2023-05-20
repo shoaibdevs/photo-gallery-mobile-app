@@ -1,0 +1,33 @@
+{
+    "user_id":"12",
+    "album_id" : "10"
+}
+ //create table user_id, album_id, open_date;
+/// check if user_id and album_id is exists in table:
+// if exists in table:
+// open_date = new Date()
+// else:
+// create column user_id, album_id, open_date;
+
+// Separete api;
+// get album_id
+// fetch the record from table according to album_id
+// example:
+[
+    {
+        "user_id":"12",
+        "open_date" : "today"
+    },
+    {
+        "user_id":"42",
+        "open_date" : "Yesterday"
+    },
+    {
+        "user_id":"72",
+        "open_date" : "7 days ago"
+    },
+    {
+        "user_id":"95",
+        "open_date" : "1 month ago"
+    },
+]

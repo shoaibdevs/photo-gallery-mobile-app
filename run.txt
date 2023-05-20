@@ -1,0 +1,13 @@
+npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res
+cd android
+./gradlew assembleDebug
+E:\pic\v2\android\app\build\outputs\apk\debug
+C:\Users\Shoaib\AppData\Local\Android\Sdk\emulator\qemu\windows-x86_64\qemu-system-x86_64.exe
+
+adb -s 2bc514f reverse tcp:8081 tcp:8081
+
+
+testshoaib2@gmail.com -- 9807654321
+testshoaib@gmail.com -- 7894561230
+
+test 2 -- 980765432198

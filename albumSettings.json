@@ -1,0 +1,41 @@
+{
+    "albums": [
+        {
+            "id": "2",
+            "albume_name": "shared album 1",
+            "user_id": "1",
+            "phone": null,
+            "temp_user_id": null,
+            "max_images": "10",
+            "shared_to": "8307715029",
+            "deadline": "2023-05-02 10:14:26",
+            "current_frame": "0",
+            "cframe_picture_no": "0",
+            "shared_by": "0",
+            "shared_album_id": null,
+            "is_album_full": "0",
+            "half_full_album": "0",
+            "isAlbumLocked": "0",
+            "first_notification_sentdate": null,
+            "second_notification_sentdate": null,
+            "third_notification_sentdate": null,
+            "fourth_notification_sentdate": null,
+            "remind": "0",
+            "remind_date": null,
+            "status": "2",
+            "created": "2023-04-02 10:14:26",
+            "created_by": "System",
+            "created_by_id": "0",
+            "updated": "0000-00-00 00:00:00",
+            "updated_by": "",
+            "updated_by_id": "0"
+        }
+    ],
+    "user": [
+        {
+            "email": "7027@gmail.com",
+            "phone": "7027555496",
+            "id": "1"
+        }
+    ]
+}
