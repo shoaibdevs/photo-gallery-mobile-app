@@ -58,23 +58,22 @@ export default function UseGuide({ navigation }) {
     if (albumName.length > 0) {
       let sharedNumbers = '';
       if (sharedTo.length > 0) {
-
         sharedTo.map(phone => {
           const numberArr = phone.phoneNumbers.reduce((formatedNumbersArr, number) => {
             let formateNumber = number.number.replace(/[()/+ -]+/g, "")
 
-            if (formateNumber.length > 12) {
-              formateNumber = formateNumber.slice(formateNumber.length - 12)
-            }
+            // if (formateNumber.length > 12) {
+            //   formateNumber = formateNumber.slice(formateNumber.length - 12)
+            // }
 
-            formateNumber = formateNumber.split('')
+            // formateNumber = formateNumber.split('')
 
-            if (formateNumber[0] === '9' && formateNumber[1] === '7' && formateNumber[2] === '2') {
-              formateNumber.shift()
-              formateNumber.shift()
-              formateNumber.shift()
-            }
-            formateNumber = formateNumber.join('')
+            // if (formateNumber[0] === '9' && formateNumber[1] === '7' && formateNumber[2] === '2') {
+            //   formateNumber.shift()
+            //   formateNumber.shift()
+            //   formateNumber.shift()
+            // }
+            // formateNumber = formateNumber.join('')
 
             if (formatedNumbersArr.length === 0) {
               return [formateNumber]
@@ -94,6 +93,7 @@ export default function UseGuide({ navigation }) {
 
         sharedNumbers = sharedNumbers.replace(/[()/+ -]+/g, "").trim().slice(0, -1)
       }
+      console.log("sharedto ",sharedNumbers)
 
       const isItemToUploadIntoNewAlbum = navigation?.state?.params?.item ? true : false
       setLoading(true)

@@ -65,7 +65,12 @@ export default function popupContacts(props) {
         }
       }
     function removeSharedPrefix(numbers) {
-        const modifiedNumbers = numbers.map(number => number.replace(/^(\+|0|972\s?)/, ''));
+        const modifiedNumbers = numbers.map(number =>{ 
+            try{
+                return number.replace(/^(\+|0|972\s?)/, '');
+            }catch(err){
+                return number;
+            }})
         return modifiedNumbers;
       }
     async function updateContacts(){
@@ -475,11 +480,11 @@ export default function popupContacts(props) {
                         res = true
                     }else{
                         let new_num = removePrefix(formatNumber(renderItem.phoneNumbers[0]?.number))
-                        res = sharedTo.includes(new_num)
+                        res = removeSharedPrefix(sharedTo).includes(new_num)
                     }
                 }
             } else {
-                res = sharedTo.map(item => item.recordID).includes(renderItem.recordID)
+                res = removeSharedPrefix(sharedTo).map(item => item.recordID).includes(renderItem.recordID)
             }
             if(props.ownerAlbum){
                 if(findItemInNumbers(selfPhone ,renderItem)){
@@ -493,7 +498,7 @@ export default function popupContacts(props) {
         return (
             <View style={styles.contactItemWrapper}>
                 {isContactShared  ? (
-                    <TouchableOpacity onPress={() => handlePress(renderItem)} style={styles.contactItem}>
+                    <TouchableOpacity onPress={() => {if(props.ownerAlbum && !ownerPhoneNumber){}else{handlePress(renderItem)}}} style={styles.contactItem}>
                         <Image style={{ height: 33, width: 34, bottom: 2, left: 40 }} source={require('../../../assets/images/iconsCircleCheckGreen.png')} />
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                             <Text style={[styles.contactText, { fontFamily: 'Arimo-Regular', fontSize: 17, paddingRight: 10, fontWeight: phone || ownerPhoneNumber == renderItem.recordID && renderItem.givenName == "אני (בעלים)" ? "bold": "normal" }]}> {renderItem.givenName + ' ' +renderItem.familyName }</Text>
@@ -502,7 +507,7 @@ export default function popupContacts(props) {
                     </TouchableOpacity>
                 ) : (
                     <View style={styles.contactItem}>
-                        <Button text="הזמן" buttonStyles={buttonStyles} onPress={() => { console.log('Button press');onButtonPress(renderItem) }} />
+                        <Button text="הזמן" buttonStyles={buttonStyles} onPress={() => {if(props.ownerAlbum && !ownerPhoneNumber){}else{console.log('Button press');onButtonPress(renderItem) }}} />
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                             <Text style={[styles.contactText, { fontFamily: 'Arimo-Regular', fontSize: 17, paddingRight: 10, fontWeight: phone || ownerPhoneNumber == renderItem.recordID  && renderItem.givenName == "אני (בעלים)"? "bold": "normal" }]}>{renderItem.givenName + ' ' +renderItem.familyName }</Text>
                             <Image source={require('../../../assets/images/iconsUser.png')} />
@@ -535,7 +540,9 @@ export default function popupContacts(props) {
             console.log(sharedTo)
             let i=0;
             for(i; i < newContactArray.length; i++){
-                let num =formatNumber(newContactArray[i].phoneNumbers[0]?.number)
+                // let num =formatNumber(newContactArray[i].phoneNumbers[0]?.number)
+                let num =removePrefix(formatNumber(newContactArray[i].phoneNumbers[0]?.number))
+
                 if(removeSharedPrefix(sharedTo).includes(num) || String(props.ownerAlbum.phone) == String(num)){
                     if(String(props.ownerAlbum.phone) != String(num)){
                        // console.log("/}{}{}{}{}{}{}{}{}{}{}",String(props.ownerAlbum.phone) , String(num))
@@ -547,7 +554,7 @@ export default function popupContacts(props) {
             }
             let j=0;
             for(j; j < newLocalContactArray.length; j++){
-                let num =formatNumber(newLocalContactArray[j].phoneNumbers[0]?.number)
+                let num =removePrefix(formatNumber(newLocalContactArray[j].phoneNumbers[0]?.number))
                 if(removeSharedPrefix(sharedTo).includes(num) ||String(props.ownerAlbum.phone) == String(num)){
                     if(String(props.ownerAlbum.phone) != String(num)){
                         // console.log("/}{}{}{}{}{}{}{}{}{}{} local",String(props.ownerAlbum.phone) , String(num))
