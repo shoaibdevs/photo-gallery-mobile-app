@@ -383,6 +383,20 @@ export async function getCounter() {
     console.log(`can't counter API Request, error: ${err}`)
   }
 }
+
+
+export async function fetchCameraResoultion(token) {
+  const url = `${consts.server_url}/getResolution`;
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+    });
+    return await response.json();
+  }
+  catch (err) {
+    console.log(`can't fetchCameraResoultion API Request, error: ${err}`)
+  }
+}
 export async function getAllSharedImages(token) {
   const url = `${consts.server_url}/getAlbumsByUserId?token=${token}`;
   console.log("here");

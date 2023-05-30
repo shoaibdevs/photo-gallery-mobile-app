@@ -7,8 +7,12 @@ import { VerticalSpace } from '../../utilities/verticalSpace'
 import { useSelector, useDispatch } from 'react-redux'
 import { addPic, setPopupError, setSharedPhotos, setPics, setCountReadyForOrderAlbums } from '../../redux'
 import CameraRoll from "@react-native-community/cameraroll"
+import ImageResizer from 'react-native-image-resizer';
+// import ImageEditor from "@react-native-community/imageeditor"
+
+// import { ImageEditor } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { fetchAlbums, getAllSharedImages } from '../../api'
+import { fetchAlbums, getAllSharedImages, fetchCameraResoultion } from '../../api'
 import { _getPics, _addPict } from '../../helpers/albumHelper';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import PopupError from '../popups/popupError';
@@ -34,6 +38,8 @@ export default function Camera({ navigation }) {
     const [flash, setFlash] = useState(false) // true - on, false - off
     const today = moment().format("YYYY-MM-DD HH:MM:SS");
 
+    const [cameraResolution, setCameraResolution] = useState(false)
+
     if(pictures.length == 0 )
         getPicts();
 
@@ -54,7 +60,23 @@ export default function Camera({ navigation }) {
             }
         }
     }
-
+    const saveImageWithCustomResolution = async (imageUri, targetWidth, targetHeight) => {
+        try {
+            const resizedImage = await ImageResizer.createResizedImage(
+                imageUri,
+                targetWidth,
+                targetHeight,
+                'JPEG',
+                100
+              );
+          
+          await CameraRoll.save(resizedImage.uri, { type: 'photo', album: 'Pic.it' });
+      
+        //   console.log('Image saved successfully with custom resolution!');
+        } catch (error) {
+          console.log('Error saving image with custom resolution:', error);
+        }
+      };
 
 
     useEffect(() => {
@@ -78,6 +100,13 @@ export default function Camera({ navigation }) {
                 dispatch(setPopupError(true))
             }
         }).catch(err => console.log(err))
+
+        fetchCameraResoultion().then((res) => {
+            console.log('Image resoultion called', res.resolution[0])
+            setCameraResolution(res.resolution[0])
+        }).catch(err =>{
+            
+        })
     }, [])
 
     // useLayoutEffect(() => {
@@ -182,9 +211,17 @@ export default function Camera({ navigation }) {
             } catch (err) {
                 console.log("erro",err)
             }
-
+            const defaultV = "480x360";
+            const [width, height] = cameraResolution ? cameraResolution.name.split("x").map(Number) : defaultV.split("x").map(Number);
+            const resizedImage = await ImageResizer.createResizedImage(
+                data.uri,
+                width,
+                height,
+                'JPEG',
+                100
+              );
             const pic = {
-                uri: data.uri,
+                uri: resizedImage.uri,
                 type: 'image/jpg',
                 name: pictures.length + 1 + '.jpg'
             }
@@ -318,7 +355,8 @@ export default function Camera({ navigation }) {
                         playSoundOnCapture={false}
                         ref={cameraRef}
                         captureAudio={false}
-                        captureQuality={false}
+                        pictureSize={cameraResolution ? cameraResolution.name : undefined}
+                        captureQuality={cameraResolution ? cameraResolution.name : false}
                         style={styles.preview}
                         useNativeZoom={true}
                         zoom={0}
