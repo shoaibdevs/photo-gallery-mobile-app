@@ -72,7 +72,7 @@ export default function Camera({ navigation }) {
           
           await CameraRoll.save(resizedImage.uri, { type: 'photo', album: 'Pic.it' });
       
-        //   console.log('Image saved successfully with custom resolution!');
+          console.log('Image saved successfully with custom resolution!');
         } catch (error) {
           console.log('Error saving image with custom resolution:', error);
         }
@@ -171,6 +171,8 @@ export default function Camera({ navigation }) {
       });
     const takePicture = async () => {
         if (cameraRef) {
+            const defaultV = "480x360";
+            const [width, height] = cameraResolution ? cameraResolution.name.split("x").map(Number) : defaultV.split("x").map(Number);
             let _date = new Date();
             const options = { quality: 0.5, base64: false, width: 1600 };
             const data = await cameraRef.current.takePictureAsync(options);
@@ -194,25 +196,24 @@ export default function Camera({ navigation }) {
                     const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
                     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                         console.log(data.uri);
-                        CameraRoll.save(data.uri, { type: 'photo', album: 'Pic.it' }).catch((error) => {
-                            console.log("error permission:", error);
-                        });
-
+                        // CameraRoll.save(data.uri, { type: 'photo', album: 'Pic.it' }).catch((error) => {
+                        //     console.log("error permission:", error);
+                        // });
+                        await saveImageWithCustomResolution(data.uri, width, height);
                     } else {
                         console.log("Photos permission denied")
                     }
                 }
                 else {
-                    CameraRoll.save(data.uri, { type: 'photo', album: 'Pic.it' }).catch((error) => {
-                        console.log("error camera roll:", error);
-                    });
+                    // CameraRoll.save(data.uri, { type: 'photo', album: 'Pic.it' }).catch((error) => {
+                    //     console.log("error camera roll:", error);
+                    // });
+                    await saveImageWithCustomResolution(data.uri, width, height);
                 }
 
             } catch (err) {
                 console.log("erro",err)
             }
-            const defaultV = "480x360";
-            const [width, height] = cameraResolution ? cameraResolution.name.split("x").map(Number) : defaultV.split("x").map(Number);
             const resizedImage = await ImageResizer.createResizedImage(
                 data.uri,
                 width,
